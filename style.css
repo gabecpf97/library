@@ -1,0 +1,42 @@
+body {
+    background-color: darkgray;
+}
+
+h1 {
+    text-align: center;
+}
+
+button {
+    border-radius: 10px;
+}
+
+.whole {
+    display: flex;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+}
+
+.created {
+    border: 5px solid;
+    margin-top: 10px;
+}
+
+.container {
+    flex: 1;
+}
+
+.add{
+    align-self: center;
+}
+
+.book {
+    display: flex;
+}
+
+.info {
+    flex: 1;
+}

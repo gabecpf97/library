@@ -48,6 +48,7 @@ Book.prototype.changeStatus = function() {
  */
 function addBookToLibrary(book) {
     myLibrary.push(book);
+    storingLibraryToLocal();
 }
 
 /**
@@ -79,7 +80,7 @@ function changeRead(book){
 function displayAllBook(){
     const container = document.querySelector('.container');
     if (container.firstChild)
-        container.removeChild(container.firstChild);
+        container.removeChild(container.lastChild);
     const allBooks = document.createElement('div');
     allBooks.classList.add('.allBooks');
     myLibrary.forEach(book => createCard(book, allBooks));
@@ -95,7 +96,10 @@ function displayAllBook(){
  */
 function createCard(book, allBooks) {
     let card = document.createElement('div');
-    card.textContent = book.toString();
+    let bookInfo = document.createElement('p');
+    card.classList.add('book');
+    bookInfo.classList.add('info');
+    bookInfo.textContent = book.toString();
     const removeIt = document.createElement('button');
     removeIt.textContent = 'remove this book';
     removeIt.addEventListener('click', () => {
@@ -106,17 +110,23 @@ function createCard(book, allBooks) {
     changeR.addEventListener('click', () => {
         changeRead(book);
     });
+    card.appendChild(bookInfo);
     card.appendChild(removeIt);
     card.appendChild(changeR);
     allBooks.appendChild(card);
 }
 
-
-// Button that display book in library
-document.querySelector('.displayLib').addEventListener('click', displayAllBook);
 // Button that add book to library
 const form = document.querySelector('.form');
-document.querySelector('.add').addEventListener('click', createForm);
+document.querySelector('.add').addEventListener('click', () => {
+    if (document.querySelector('.created')) {
+        document.querySelector('.add').textContent = "NEW BOOK";
+        form.removeChild(document.querySelector('.created'));
+    } else {
+        document.querySelector('.add').textContent = "CANCEL";
+        createForm();
+    }
+});
 
 /**
  * Function that create a form that ask user for info
@@ -125,7 +135,7 @@ document.querySelector('.add').addEventListener('click', createForm);
  */
 function createForm() {
     const created = document.createElement('div');
-    created.classList.add('.created');
+    created.classList.add('created');
     const prompt_name = document.createElement('h2');
     const input_name = document.createElement('input');
     const prompt_author = document.createElement('h2');
@@ -172,15 +182,37 @@ function createForm() {
         const read = document.querySelector('.read').value;
         addBookToLibrary(new Book(name, author, pages, read));
         form.removeChild(created);
+        document.querySelector('.add').textContent = "NEW BOOK";
         displayAllBook();
     });
 }
 
-// add some book to the library
-let harryPorter = new Book('Harry Porter', 'J.K. Rowling', 'A lot', true);
-let dune = new Book('Dune', 'Frank Herbert', 'IDK amount', false);
-let badSeed = new Book('The Bad Seed', 'Jory John', 'Some amount', false);
+/**
+ * Function that store library entry into user's local storage
+ */
+function storingLibraryToLocal() {
+    localStorage.setItem('library_arr', JSON.stringify(myLibrary));
+}
 
-addBookToLibrary(harryPorter);
-addBookToLibrary(dune);
-addBookToLibrary(badSeed);
+/**
+ * Function that retrieve library entry from user's local storage
+ * if there is any
+ */
+function getLibraryFromLocal() {
+    let lib_arr = localStorage.getItem('library_arr');
+    if (lib_arr !== null) {
+        lib_arr = lib_arr.substring(2, lib_arr.length - 2).split('},{');
+        lib_arr.forEach(entry => {
+            entry = entry.replace(/"/g, "");
+            let values = entry.split(',');
+            let name = values[0].substring(5);
+            let author = values[1].substring(7);
+            let pages = values[2].substring(6);
+            let read = values[3].substring(5);
+            addBookToLibrary(new Book(name, author, pages, read));
+        });
+    }
+}
+
+getLibraryFromLocal();
+displayAllBook();
