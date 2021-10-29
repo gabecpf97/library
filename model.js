@@ -1,5 +1,15 @@
+// Library array that store all the books
 let myLibrary = [];
 
+/**
+ * Constructor that create an book object that
+ * hold's book's name, author, number of pages
+ * and whether or not that person have read it
+ * @param {*} name name of book
+ * @param {*} author book's author
+ * @param {*} pages number of pages
+ * @param {*} read read it or not
+ */
 function Book(name, author, pages, read) {
     this.name = name;
     this.author = author;
@@ -7,6 +17,11 @@ function Book(name, author, pages, read) {
     this.read = read;
 }
 
+/**
+ * Book toString method that return a string
+ * represent the object's data
+ * @returns String of object's data
+ */
 Book.prototype.toString = function() {
     let haveRead = '';
     if (this.read)
@@ -16,6 +31,10 @@ Book.prototype.toString = function() {
     return `${this.name} by ${this.author}. ${this.pages} pages. ${haveRead}`;
 }
 
+/**
+ * Method that changes the status of whether the 
+ * book has been read or not
+ */
 Book.prototype.changeStatus = function() {
     if (this.read)
         this.read = false;
@@ -23,10 +42,19 @@ Book.prototype.changeStatus = function() {
         this.read = true;
 }
 
+/**
+ * Function that add book to library
+ * @param {*} book book object
+ */
 function addBookToLibrary(book) {
     myLibrary.push(book);
 }
 
+/**
+ * Function that remove book from library
+ * and display the updated library
+ * @param {*} name book object
+ */
 function removeBook(name) {
     for (let i = 0; i < myLibrary.length; i++) {
         if (myLibrary[i].name === name)
@@ -35,11 +63,19 @@ function removeBook(name) {
     displayAllBook();
 }
 
+/**
+ * Function that change the status of the book
+ * and display the updated library
+ * @param {*} book book object
+ */
 function changeRead(book){
     book.changeStatus();
     displayAllBook();
 }
 
+/**
+ * Function that dispaly the library to the user
+ */
 function displayAllBook(){
     const container = document.querySelector('.container');
     if (container.firstChild)
@@ -50,6 +86,13 @@ function displayAllBook(){
     container.appendChild(allBooks);
 }
 
+/**
+ * Function that create each section for each book, 
+ * with button to remove this book from library and
+ * button to change the status
+ * @param {*} book book object
+ * @param {*} allBooks div that show all dispaly
+ */
 function createCard(book, allBooks) {
     let card = document.createElement('div');
     card.textContent = book.toString();
@@ -68,10 +111,18 @@ function createCard(book, allBooks) {
     allBooks.appendChild(card);
 }
 
+
+// Button that display book in library
 document.querySelector('.displayLib').addEventListener('click', displayAllBook);
+// Button that add book to library
 const form = document.querySelector('.form');
 document.querySelector('.add').addEventListener('click', createForm);
 
+/**
+ * Function that create a form that ask user for info
+ * to create a book that will be store in the library, after 
+ * it is added to library, the form will be removed
+ */
 function createForm() {
     const created = document.createElement('div');
     created.classList.add('.created');
@@ -125,6 +176,7 @@ function createForm() {
     });
 }
 
+// add some book to the library
 let harryPorter = new Book('Harry Porter', 'J.K. Rowling', 'A lot', true);
 let dune = new Book('Dune', 'Frank Herbert', 'IDK amount', false);
 let badSeed = new Book('The Bad Seed', 'Jory John', 'Some amount', false);
