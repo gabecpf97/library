@@ -7,6 +7,22 @@ function Book(name, author, pages, read) {
     this.read = read;
 }
 
+Book.prototype.toString = function() {
+    let haveRead = '';
+    if (this.read)
+        haveRead = 'Have read this book';
+    else
+        haveRead = 'Have not read this book';
+    return `${this.name} by ${this.author}. ${this.pages} pages. ${haveRead}`;
+}
+
+Book.prototype.changeStatus = function() {
+    if (this.read)
+        this.read = false;
+    else
+        this.read = true;
+}
+
 function addBookToLibrary(book) {
     myLibrary.push(book);
 }
@@ -19,33 +35,37 @@ function removeBook(name) {
     displayAllBook();
 }
 
+function changeRead(book){
+    book.changeStatus();
+    displayAllBook();
+}
+
 function displayAllBook(){
     const container = document.querySelector('.container');
     if (container.firstChild)
         container.removeChild(container.firstChild);
     const allBooks = document.createElement('div');
     allBooks.classList.add('.allBooks');
-    myLibrary.forEach(book => {
-        let card = document.createElement('div');
-        card.textContent = book.toString();
-        const removeIt = document.createElement('button');
-        removeIt.textContent = 'remove this book';
-        removeIt.addEventListener('click', () => {
-            removeBook(book.name);
-        });
-        card.appendChild(removeIt);
-        allBooks.appendChild(card);
-    });
+    myLibrary.forEach(book => createCard(book, allBooks));
     container.appendChild(allBooks);
 }
 
-Book.prototype.toString = function() {
-    let haveRead = '';
-    if (this.read)
-        haveRead = 'Have read this book';
-    else
-        haveRead = 'Have not read this book';
-    return `${this.name} by ${this.author}. ${this.pages} pages. ${haveRead}`;
+function createCard(book, allBooks) {
+    let card = document.createElement('div');
+    card.textContent = book.toString();
+    const removeIt = document.createElement('button');
+    removeIt.textContent = 'remove this book';
+    removeIt.addEventListener('click', () => {
+        removeBook(book.name);
+    });
+    const changeR = document.createElement('button');
+    changeR.textContent = "Read/UnRead";
+    changeR.addEventListener('click', () => {
+        changeRead(book);
+    });
+    card.appendChild(removeIt);
+    card.appendChild(changeR);
+    allBooks.appendChild(card);
 }
 
 document.querySelector('.displayLib').addEventListener('click', displayAllBook);
