@@ -2,44 +2,49 @@
 let myLibrary = [];
 
 /**
- * Constructor that create an book object that
- * hold's book's name, author, number of pages
- * and whether or not that person have read it
- * @param {*} name name of book
- * @param {*} author book's author
- * @param {*} pages number of pages
- * @param {*} read read it or not
+ * A book class that store all its data
  */
-function Book(name, author, pages, read) {
+class Book {
+    /**
+     * Constructor that create an book object that
+     * hold's book's name, author, number of pages
+     * and whether or not that person have read it
+     * @param {*} name name of book
+     * @param {*} author book's author
+     * @param {*} pages number of pages
+     * @param {*} read read it or not
+     */
+    constructor(name, author, pages, read) {
     this.name = name;
     this.author = author;
     this.pages = pages;
-    this.read = read;
-}
+    this.read = (read == "Yes") ? true : false;
+    }
 
-/**
- * Book toString method that return a string
- * represent the object's data
- * @returns String of object's data
- */
-Book.prototype.toString = function() {
-    let haveRead = '';
-    if (this.read)
-        haveRead = 'Have read this book';
-    else
-        haveRead = 'Have not read this book';
-    return `${this.name} by ${this.author}. ${this.pages} pages. ${haveRead}`;
-}
+    /**
+     * Book toString method that return a string
+     * represent the object's data
+     * @returns String of object's data
+     */
+    toString() {
+        let haveRead = '';
+        if (this.read)
+            haveRead = 'Have read this book';
+        else
+            haveRead = 'Have not read this book';
+        return `${this.name} by ${this.author}. ${this.pages} pages. ${haveRead}`;
+    }
 
-/**
- * Method that changes the status of whether the 
- * book has been read or not
- */
-Book.prototype.changeStatus = function() {
-    if (this.read)
+    /**
+     * Method that changes the status of whether the 
+     * book has been read or not
+     */
+    changeStatus() {
+        if (this.read)
         this.read = false;
-    else
+         else
         this.read = true;
+    }
 }
 
 /**
@@ -82,7 +87,7 @@ function displayAllBook(){
     if (container.firstChild)
         container.removeChild(container.lastChild);
     const allBooks = document.createElement('div');
-    allBooks.classList.add('.allBooks');
+    allBooks.classList.add('allBooks');
     myLibrary.forEach(book => createCard(book, allBooks));
     container.appendChild(allBooks);
 }
